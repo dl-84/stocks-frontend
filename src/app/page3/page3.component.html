@@ -1,0 +1,15 @@
+<div>
+    <p-panel>
+        <ng-template pTemplate="header">
+            <span *ngIf="active; else elseBlock" class="text-primary font-semibold text-xl">
+                Stocks Viewer - {{ header }}
+            </span>
+
+            <ng-template #elseBlock>
+                This Page is not active.
+            </ng-template>
+
+        </ng-template>
+        <p-button label="<< Back to Main" [routerLink]="[mainRoute]"></p-button>
+    </p-panel>
+</div>
