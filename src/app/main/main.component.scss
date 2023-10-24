@@ -1,6 +1,35 @@
-.container {
-    min-width: 400px;
-    max-width: 1000px;
+h2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.add-dashbord-button {
+    display: flex;
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+:host ::ng-deep .p-toolbar {
+    margin-bottom: 15px;
+}
+
+:host ::ng-deep .p-toolbar .p-button {
+    margin-left: 10px;
+}
+
+:host ::ng-deep .p-dialog {
+    max-width: 400px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.dialog-input-field {
+    width: 100%;
+}
+
+.dialog-add-button {
+    float: right;
+    margin-top: 5px;
 }

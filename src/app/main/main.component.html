@@ -1,7 +1,45 @@
-<p-panel>
-    <ng-template pTemplate="header">
-        <span class="text-primary font-semibold text-xl">Stocks Viewer - Main</span>
-    </ng-template>
+<h1>Stocks Viewer</h1>
 
-    <app-navigation></app-navigation>
-</p-panel>
+<h2>
+    <span>Dashboard's</span>
+    <p-button label="Add" icon="pi pi-plus" (click)="showAddDialog()"></p-button>
+</h2>
+
+<p-toolbar *ngIf="dashboards.length == 0">
+    <ng-template pTemplate="center">
+        <span class="text-primary font-semibold text-xl">
+            No Dashbords are configured, please click on add to create a new one.
+        </span>
+    </ng-template>
+</p-toolbar>
+
+<p-toolbar *ngFor="let dashboard of dashboards; index as i">
+    <ng-template pTemplate="start">
+        <h4>{{ dashboard.header }}</h4>
+    </ng-template>
+    <ng-template pTemplate="end">
+        <p-button icon="pi pi-eye" (click)="open(dashboard.id)"></p-button>
+        <p-button icon="pi pi-pencil" severity="success" (click)="showEditDialog(dashboard)"></p-button>
+        <p-button icon="pi pi-trash" severity="danger" (click)="delete(dashboard.id)"></p-button>
+    </ng-template>
+</p-toolbar>
+
+<p-dialog header="Enter Dashbord Data" [(visible)]="addDialogIsVisible">
+    <input class="dialog-input-field" type="text" maxlength="20" placeholder="Title" pInputText [(ngModel)]="header" />
+
+    <div class="dialog-add-button">
+        <p-button label="OK" (click)="add()"></p-button>
+    </div>
+</p-dialog>
+
+<p-dialog header="Edit Dashbord Data" [(visible)]="editDialogIsVisible">
+    <input class="dialog-input-field" type="text" maxlength="20" placeholder="Title" pInputText [(ngModel)]="header" />
+
+    <div class="dialog-add-button">
+        <p-button label="OK" (click)="edit(id)"></p-button>
+    </div>
+</p-dialog>
+
+<p-dialog header="Error" [(visible)]="errorDialogIsVisible">
+    <p>No Dashboard without an title.</p>
+</p-dialog>

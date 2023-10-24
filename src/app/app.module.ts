@@ -7,21 +7,19 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
+import { DividerModule } from 'primeng/divider';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
+import { ToolbarModule } from 'primeng/toolbar';
 
 import { AppConfigService } from './core/services/app.config.service';
 
 import { MainComponent } from './main/main.component';
-import { NavigationComponent } from './navigation/navigation.component';
-import { Page1Component } from './page1/page1.component';
 import { ErrorComponent } from './error/error.component';
-import { Page2Component } from './page2/page2.component';
-import { Page3Component } from './page3/page3.component';
-import { Page4Component } from './page4/page4.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 export function appConfigInit(appConfigService: AppConfigService) {
   return () => {
@@ -32,25 +30,23 @@ export function appConfigInit(appConfigService: AppConfigService) {
 @NgModule({
   declarations: [
     AppComponent,
-    MainComponent,
-    NavigationComponent,
-    Page1Component,
     ErrorComponent,
-    Page2Component,
-    Page3Component,
-    Page4Component,
+    DashboardComponent,
+    MainComponent,
   ],
   imports: [
-    AccordionModule,
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     ButtonModule,
+    CardModule,
     DialogModule,
+    DividerModule,
     FormsModule,
     HttpClientModule,
     InputTextModule,
     PanelModule,
-    AppRoutingModule
+    ToolbarModule
   ],
   providers: [
     AppConfigService,

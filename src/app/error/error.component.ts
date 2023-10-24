@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { RouteNames } from '../core/const/routeNames';
+import { Route } from '../core/const/route';
 
 @Component({
   selector: 'app-error',
@@ -9,6 +9,6 @@ import { RouteNames } from '../core/const/routeNames';
 })
 export class ErrorComponent {
   get mainRoute(): string {
-    return RouteNames.main;
+    return Route.main;
   }
 }
