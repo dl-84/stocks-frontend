@@ -23,7 +23,7 @@ export class MainComponent {
     private router: Router) { }
 
   get dashboards(): Array<DashboardDto> {
-    return this.configService.pages;
+    return this.configService.dashboards;
   }
 
   showAddDialog(): void {

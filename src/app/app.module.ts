@@ -7,10 +7,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
-import { DividerModule } from 'primeng/divider';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -35,13 +34,12 @@ export function appConfigInit(appConfigService: AppConfigService) {
     MainComponent,
   ],
   imports: [
+    AutoCompleteModule,
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     ButtonModule,
-    CardModule,
     DialogModule,
-    DividerModule,
     FormsModule,
     HttpClientModule,
     InputTextModule,

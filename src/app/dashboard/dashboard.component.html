@@ -1,1 +1,31 @@
-<p>dashboard {{ index }} works!</p>
+<h2>
+    <p-button label="Home" icon="pi pi-home" [routerLink]="[mainRoute]"></p-button>
+    <span class="header">{{ dashboard.header }}</span>
+</h2>
+
+<div class="auto-complete-container">
+    <p-autoComplete placeholder="Search" [(ngModel)]="selectedStock" [suggestions]="filteredStocks"
+        (completeMethod)="search($event)"></p-autoComplete>
+
+    <p-button label="Add" icon="pi pi-plus" (onClick)="add()"></p-button>
+</div>
+
+
+<!--
+<p-toolbar *ngIf="dashboards.length == 0">
+    <ng-template pTemplate="center">
+        <span class="text-primary font-semibold text-xl">
+            No Dashbords are configured, please click on add to create a new one.
+        </span>
+    </ng-template>
+</p-toolbar>    
+-->
+
+<p-toolbar>
+    <ng-template pTemplate="start">
+        <h4>Schau ma mal was wird...</h4>
+    </ng-template>
+    <ng-template pTemplate="end">
+        <p-button icon="pi pi-trash" severity="danger" (onClick)="delete()"></p-button>
+    </ng-template>
+</p-toolbar>
