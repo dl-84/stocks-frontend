@@ -1,7 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
 
-import { AppConfigService } from '../core/services/app.config.service';
+import { AppDashboardService } from '../core/services/app.dashboard.service';
 import { AppFinnhubService } from '../core/services/app.finnhub.service';
 import { DashboardDto } from '../core/dto/dashboardDto';
 import { Route } from '../core/const/route';
@@ -28,7 +28,7 @@ export class DashboardComponent {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private configService: AppConfigService,
+    private configService: AppDashboardService,
     private finnhubService: AppFinnhubService) { }
 
   ngOnInit() {

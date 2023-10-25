@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AppConfigService } from '../core/services/app.config.service';
+import { AppDashboardService } from '../core/services/app.dashboard.service';
 import { DashboardDto } from '../core/dto/dashboardDto';
 import { Route } from '../core/const/route';
 
@@ -19,7 +19,7 @@ export class MainComponent {
   header: string = '';
 
   constructor(
-    private configService: AppConfigService,
+    private configService: AppDashboardService,
     private router: Router) { }
 
   get dashboards(): Array<DashboardDto> {

@@ -11,7 +11,7 @@ import { Url } from '../const/url';
 @Injectable({
     providedIn: 'root'
 })
-export class AppConfigService {
+export class AppDashboardService {
     public dashboards: Array<DashboardDto> = [];
 
     constructor(private httpClient: HttpClient, private router: Router) { }

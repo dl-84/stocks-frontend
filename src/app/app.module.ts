@@ -14,15 +14,15 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { ToolbarModule } from 'primeng/toolbar';
 
-import { AppConfigService } from './core/services/app.config.service';
+import { AppDashboardService } from './core/services/app.dashboard.service';
 
 import { MainComponent } from './main/main.component';
 import { ErrorComponent } from './error/error.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
-export function appConfigInit(appConfigService: AppConfigService) {
+export function appConfigInit(appDashboardService: AppDashboardService) {
   return () => {
-    return appConfigService.load()
+    return appDashboardService.load()
   };
 }
 
@@ -47,12 +47,12 @@ export function appConfigInit(appConfigService: AppConfigService) {
     ToolbarModule
   ],
   providers: [
-    AppConfigService,
+    AppDashboardService,
     {
       provide: APP_INITIALIZER,
       useFactory: appConfigInit,
       multi: true,
-      deps: [AppConfigService]
+      deps: [AppDashboardService]
     }
   ],
   bootstrap: [AppComponent]
