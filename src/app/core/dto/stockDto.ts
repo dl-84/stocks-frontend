@@ -3,7 +3,7 @@ export interface StockDto {
     description: string
     displaySymbol: string
     figi: string
-    isin: any
+    isin: string
     mic: string
     shareClassFIGI: string
     symbol: string
