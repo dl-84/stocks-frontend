@@ -1,4 +1,5 @@
-export interface StockDto {
+export interface StockMetaDataDto {
+    dashboardId: number,
     currency: string
     description: string
     displaySymbol: string

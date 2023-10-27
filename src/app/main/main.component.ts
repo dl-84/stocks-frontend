@@ -66,7 +66,7 @@ export class MainComponent {
       return;
     }
 
-    this.configService.editElement({
+    this.configService.updateElement({
       id: id,
       header: this.header
     });

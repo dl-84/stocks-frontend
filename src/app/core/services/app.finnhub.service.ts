@@ -2,50 +2,57 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { firstValueFrom } from 'rxjs';
+import { WebSocket } from 'ws';
 
 import { Url } from '../const/url';
-import { StockDto } from '../dto/stockDto';
+import { StockMetaDataDto } from '../dto/stockMetaDataDto';
+
 
 @Injectable({
     providedIn: 'root'
 })
 export class AppFinnhubService {
-    private socket: WebSocket;
+    private webSocket: WebSocket;
     private token: String = 'cksd94hr01qstsqtbn50cksd94hr01qstsqtbn5g';
 
-
     constructor(private httpClient: HttpClient) {
-        this.socket = new WebSocket('wss://ws.finnhub.io?token=cksd94hr01qstsqtbn50cksd94hr01qstsqtbn5g');
+        this.webSocket = new WebSocket('wss://ws.finnhub.io?token=cksd94hr01qstsqtbn50cksd94hr01qstsqtbn5g');
     }
 
-    async getAvailableStocks(): Promise<Array<StockDto>> {
-        let result: Array<StockDto> = [];
+    async getAvailableStocks(): Promise<Array<StockMetaDataDto>> {
+        let result: Array<StockMetaDataDto> = [];
 
         await firstValueFrom(
             this.httpClient.get(Url.availableStocks + `&token=${this.token}`))
             .then(data => {
-                result = (data as Array<StockDto>);
+                result = (data as Array<StockMetaDataDto>);
                 return data;
             });
 
         return result;
     }
 
+    connectExisting(): void {
+
+    }
+
     open(symbol: string) {
-        this.socket.send(JSON.stringify({ 'type': 'subscribe', 'symbol': symbol }));
+        /*
+        this.socket.send(JSON.stringify({ 'type': 'subscribe', 'symbol': 'AMZN' }));
 
         this.socket.addEventListener('message', function (event) {
             console.log('Message from server ', event.data);
         });
 
+        console.log('sepp');
+        */
+
+
     }
+
+
 
     close() {
-        this.socket.send(JSON.stringify({ 'type': 'unsubscribe', 'symbol': 'BINANCE:BTCUSDT' }));
+        // this.socket.send(JSON.stringify({ 'type': 'unsubscribe', 'symbol': 'BINANCE:BTCUSDT' }));
     }
-
-    getStockCandles(): void {
-
-    }
-
 }

@@ -19,10 +19,11 @@ import { AppDashboardService } from './core/services/app.dashboard.service';
 import { MainComponent } from './main/main.component';
 import { ErrorComponent } from './error/error.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { LineChartComponent } from './line-chart/line-chart.component';
 
 export function appConfigInit(appDashboardService: AppDashboardService) {
   return () => {
-    return appDashboardService.load()
+    return appDashboardService.getAll()
   };
 }
 
@@ -32,6 +33,7 @@ export function appConfigInit(appDashboardService: AppDashboardService) {
     ErrorComponent,
     DashboardComponent,
     MainComponent,
+    LineChartComponent,
   ],
   imports: [
     AutoCompleteModule,

@@ -10,22 +10,14 @@
     <p-button label="Add" icon="pi pi-plus" (onClick)="add()"></p-button>
 </div>
 
-
-<!--
-<p-toolbar *ngIf="dashboards.length == 0">
-    <ng-template pTemplate="center">
-        <span class="text-primary font-semibold text-xl">
-            No Dashbords are configured, please click on add to create a new one.
-        </span>
-    </ng-template>
-</p-toolbar>    
--->
-
-<p-toolbar>
-    <ng-template pTemplate="start">
-        <h4>Schau ma mal was wird...</h4>
-    </ng-template>
-    <ng-template pTemplate="end">
-        <p-button icon="pi pi-trash" severity="danger" (onClick)="delete()"></p-button>
-    </ng-template>
+<p-toolbar *ngIf="stocks === undefined || stocks === null || stocks.length === 0;">
+    <span>
+        No Stocks are configured, search one and click on add.
+    </span>
 </p-toolbar>
+
+<div *ngFor="let stock of stocks">
+    <p-panel header="{{ stock.symbol }}">
+        <app-line-chart [stockLiveData]="liveData"></app-line-chart>
+    </p-panel>
+</div>

@@ -1,4 +1,4 @@
-import { HttpClient, HttpStatusCode } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -16,9 +16,9 @@ export class AppDashboardService {
 
     constructor(private httpClient: HttpClient, private router: Router) { }
 
-    load(): Promise<any> {
+    getAll(): Promise<any> {
         const promise = firstValueFrom(
-            this.httpClient.get(Url.config))
+            this.httpClient.get(Url.dashbord))
             .then(data => {
                 Object.assign(this.dashboards, data);
                 return data;
@@ -32,20 +32,20 @@ export class AppDashboardService {
 
     add(dashboard: DashboardDto): void {
         firstValueFrom(
-            this.httpClient.post(Url.config, dashboard))
+            this.httpClient.post(Url.dashbord, dashboard))
             .then(_ => {
-                this.load();
+                this.getAll();
             })
             .catch(_ => {
                 this.router.navigate([Route.error]);
             });
     }
 
-    editElement(dashboard: DashboardDto) {
+    updateElement(dashboard: DashboardDto) {
         firstValueFrom(
-            this.httpClient.put(Url.config, dashboard))
+            this.httpClient.put(Url.dashbord, dashboard))
             .then(_ => {
-                this.load();
+                this.getAll();
             })
             .catch(_ => {
                 this.router.navigate([Route.error]);
@@ -54,10 +54,10 @@ export class AppDashboardService {
 
     deleteAtIndex(id: Number): void {
         firstValueFrom(
-            this.httpClient.delete(Url.config + `/${id}`))
+            this.httpClient.delete(Url.dashbord + `/${id}`))
             .then(_ => {
                 this.dashboards.splice(this.dashboards.findIndex(x => x.id == id), 1);
-                this.load();
+                this.getAll();
             })
             .catch(error => {
                 console.log(error);

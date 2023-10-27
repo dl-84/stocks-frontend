@@ -14,3 +14,7 @@ h2 {
     display: flex;
     justify-content: space-between;
 }
+
+:host ::ng-deep .p-panel {
+    margin-bottom: 15px;
+}
