@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AppDashboardService } from '../core/services/app.dashboard.service';
+import { AppStockService } from '../core/services/app.stock.service';
 import { DashboardDto } from '../core/dto/dashboardDto';
 import { Route } from '../core/const/route';
 
@@ -20,7 +21,8 @@ export class MainComponent {
 
   constructor(
     private configService: AppDashboardService,
-    private router: Router) { }
+    private router: Router,
+    private stockService: AppStockService) { }
 
   get dashboards(): Array<DashboardDto> {
     return this.configService.dashboards;
@@ -75,7 +77,8 @@ export class MainComponent {
     this.editDialogIsVisible = false;
   }
 
-  delete(id: Number): void {
+  delete(id: number): void {
+    this.stockService.deleteByDashboardId(id);
     this.configService.deleteAtIndex(id);
   }
 }

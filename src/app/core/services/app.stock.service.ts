@@ -53,4 +53,17 @@ export class AppStockService {
                 this.router.navigate([Route.error]);
             });
     }
+
+    deleteByDashboardId(dashboardId: number): void {
+        firstValueFrom(
+            this.httpClient.delete(Url.stock + `?dashboardId=${dashboardId}`))
+            .then(_ => {
+                this.stocks = [];
+                this.getAllForDashboard(dashboardId);
+            })
+            .catch(error => {
+                console.log(error);
+                this.router.navigate([Route.error]);
+            });
+    }
 }
