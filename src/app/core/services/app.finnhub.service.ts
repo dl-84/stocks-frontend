@@ -8,13 +8,14 @@ import { Url } from '../const/url';
 import { StockMetaDataDto } from '../dto/stockMetaDataDto';
 import { Token } from '../const/token';
 import { Websocket } from '../const/websocket';
+import { StockLiveDataDto } from '../dto/stockLiveDataDto';
 
 
 @Injectable({
     providedIn: 'root'
 })
 export class AppFinnhubService {
-    private webSocket: WebSocketSubject<unknown>;
+    private webSocket;
 
     constructor(private httpClient: HttpClient) {
         this.webSocket = webSocket(Websocket.finnhub);
@@ -33,7 +34,7 @@ export class AppFinnhubService {
         return result;
     }
 
-    get websocket(): WebSocketSubject<unknown> {
+    get websocket() {
         return this.webSocket
     }
 }

@@ -67,11 +67,18 @@ export class DashboardComponent {
   }
 
   add(): void {
-    let stock: StockMetaDataDto = this.availableStocks.find(
-      x => x.description == this.selectedStock)!;
+    if (!this.selectedStock) {
+      return
+    }
+
+    let stock: StockMetaDataDto | undefined = this.availableStocks.find(
+      x => x.description == this.selectedStock);
+
+    if (!stock) {
+      return;
+    }
 
     stock.dashboardId = this.dashboardId;
-
     this.selectedStock = '';
     this.stockService.add(stock);
   }
@@ -81,16 +88,10 @@ export class DashboardComponent {
   }
 
   unsubscribe() {
-    /*
     this.stocks.forEach(stock => {
       this.finnhubService.websocket.next({
         'type': 'unsubscribe', 'symbol': stock.symbol
       });
-    });
-    */
-
-    this.finnhubService.websocket.next({
-      'type': 'unsubscribe', 'symbol': 'BINANCE:BTCUSDT'
     });
 
     this.finnhubService.websocket.complete();

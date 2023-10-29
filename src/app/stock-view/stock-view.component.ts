@@ -16,7 +16,11 @@ export class StockViewComponent {
   @Input() stock: StockMetaDataDto;
 
   public stockDisplayData: Array<StockDisplayDataDto> = [];
-  public stockDisplayDataForTable: Array<StockDisplayDataDto> = [];
+  public stockDisplayDataForTable: Array<StockDisplayDataDto> = [
+    { timestamp: new Date().valueOf(), price: 0 },
+    { timestamp: new Date().valueOf(), price: 0 },
+    { timestamp: new Date().valueOf(), price: 0 },
+  ];
 
   private startTimestampForTableCalculation: Date;
 
@@ -30,34 +34,36 @@ export class StockViewComponent {
     this.startTimestampForTableCalculation = new Date();
   }
 
-  delete(figi: string, dashboardId: number) {
+  delete(figi: string, dashboardId: number, symbol: string) {
+    this.finnhubService.websocket.next({
+      'type': 'subscribe', 'symbol': symbol
+    });
+
     this.stockService.deleteByFigi(figi, dashboardId);
   }
 
   private subscribe() {
-    /*
-    this.stocks.forEach(stock => {
-      this.finnhubService.websocket.next({
-        'type': 'unsubscribe', 'symbol': stock.symbol
-      });
-    })
-    */
-
+    console.log(this.stock.symbol);
     this.finnhubService.websocket.next({
-      'type': 'subscribe', 'symbol': 'BINANCE:BTCUSDT'
+      'type': 'subscribe', 'symbol': this.stock.symbol
     });
 
     this.finnhubService.websocket.subscribe({
       next: data => {
-        (data as StockLiveDataDto).data.map(content => {
-          this.stockDisplayData.push({
-            timestamp: content.t,
-            price: content.p,
-          })
-        });
+        const response: StockLiveDataDto = (data as StockLiveDataDto);
 
-        console.log(data);
-        this.calculateTableData();
+        if (response.type === 'trade') {
+          response.data.map(content => {
+            if (content.s === this.stock.symbol) {
+              this.stockDisplayData.push({
+                timestamp: content.t,
+                price: content.p,
+              })
+
+              this.calculateTableData();
+            }
+          });
+        }
       },
       error: error => {
         console.log(error)

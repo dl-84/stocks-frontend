@@ -3,7 +3,8 @@
         {{ stock.description }}
     </ng-template>
     <ng-template pTemplate="icons">
-        <p-button icon="pi pi-trash" severity="danger" (click)="delete(stock.figi,stock.dashboardId)"></p-button>
+        <p-button icon="pi pi-trash" severity="danger"
+            (click)="delete(stock.figi,stock.dashboardId, stock.symbol)"></p-button>
     </ng-template>
 
     <ng-template pTemplate>
