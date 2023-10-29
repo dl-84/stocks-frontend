@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
+import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 
 import { AppDashboardService } from './core/services/app.dashboard.service';
@@ -20,6 +21,7 @@ import { MainComponent } from './main/main.component';
 import { ErrorComponent } from './error/error.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
+import { StockViewComponent } from './stock-view/stock-view.component';
 
 export function appConfigInit(appDashboardService: AppDashboardService) {
   return () => {
@@ -34,6 +36,7 @@ export function appConfigInit(appDashboardService: AppDashboardService) {
     DashboardComponent,
     MainComponent,
     LineChartComponent,
+    StockViewComponent,
   ],
   imports: [
     AutoCompleteModule,
@@ -46,6 +49,7 @@ export function appConfigInit(appDashboardService: AppDashboardService) {
     HttpClientModule,
     InputTextModule,
     PanelModule,
+    TableModule,
     ToolbarModule
   ],
   providers: [

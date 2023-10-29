@@ -1,5 +1,11 @@
 export interface StockLiveDataDto {
-    symbol: string
-    lastPrice: number
-    timestamp: number
+    data: StockLiveDataContentDto[]
+    type: string
+}
+
+export interface StockLiveDataContentDto {
+    p: number
+    s: string
+    t: number
+    v: number
 }

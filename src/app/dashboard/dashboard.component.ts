@@ -7,7 +7,6 @@ import { AppStockService } from '../core/services/app.stock.service';
 import { DashboardDto } from '../core/dto/dashboardDto';
 import { Route } from '../core/const/route';
 import { StockMetaDataDto } from '../core/dto/stockMetaDataDto';
-import { StockLiveDataDto } from '../core/dto/stockLiveDataDto';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -20,13 +19,12 @@ interface AutoCompleteCompleteEvent {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
-  private id: number;
-  dashboard: DashboardDto;
+  public dashboard: DashboardDto;
+  public filteredStocks: Array<String>;
+  public selectedStock: string;
 
   private availableStocks: Array<StockMetaDataDto>;
-
-  filteredStocks: Array<String>;
-  selectedStock: string;
+  private dashboardId: number;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -36,37 +34,20 @@ export class DashboardComponent {
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
-      this.id = Number.parseInt(params['id']);
+      this.dashboardId = Number.parseInt(params['id']);
     });
 
     this.dashboard = this.dashboardService.dashboards
-      .find((value) => value.id === this.id)!;
+      .find((value) => value.id === this.dashboardId)!;
 
-    this.stockService.getAllForDashboard(this.id)
-      .then(data => {
-        (data as Array<StockLiveDataDto>)
-          .forEach(x => this.finnhubService.open(x.symbol))
-      });
+    this.stockService.getAllForDashboard(this.dashboardId);
 
     this.finnhubService.getAvailableStocks()
       .then(data => { this.availableStocks = data });
-
-    this.finnhubService.connectExisting();
   }
 
   get stocks(): Array<StockMetaDataDto> {
     return this.stockService.stocks;
-  }
-
-  get liveData(): Array<StockLiveDataDto> {
-    return [
-      { symbol: 'AAPL', timestamp: 1262300400, lastPrice: 7210.89 },
-      { symbol: 'AAPL', timestamp: 1262559600, lastPrice: 7230.89 },
-      { symbol: 'AAPL', timestamp: 1262646000, lastPrice: 7250.89 },
-      { symbol: 'AAPL', timestamp: 1262732400, lastPrice: 7270.89 },
-      { symbol: 'AAPL', timestamp: 1262818800, lastPrice: 7890.89 },
-      { symbol: 'AAPL', timestamp: 1262818800, lastPrice: 7810.89 },
-    ]
   }
 
   search(event: AutoCompleteCompleteEvent): void {
@@ -89,20 +70,29 @@ export class DashboardComponent {
     let stock: StockMetaDataDto = this.availableStocks.find(
       x => x.description == this.selectedStock)!;
 
-    stock.dashboardId = this.id;
+    stock.dashboardId = this.dashboardId;
 
     this.selectedStock = '';
     this.stockService.add(stock);
   }
 
-  delete(): void {
-  }
-
   get mainRoute() {
     return Route.main
   }
+
+  unsubscribe() {
+    /*
+    this.stocks.forEach(stock => {
+      this.finnhubService.websocket.next({
+        'type': 'unsubscribe', 'symbol': stock.symbol
+      });
+    });
+    */
+
+    this.finnhubService.websocket.next({
+      'type': 'unsubscribe', 'symbol': 'BINANCE:BTCUSDT'
+    });
+
+    this.finnhubService.websocket.complete();
+  }
 }
-
-
-
-

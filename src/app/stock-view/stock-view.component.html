@@ -1,0 +1,37 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        {{ stock.description }}
+    </ng-template>
+    <ng-template pTemplate="icons">
+        <p-button icon="pi pi-trash" severity="danger" (click)="delete(stock.figi,stock.dashboardId)"></p-button>
+    </ng-template>
+
+    <ng-template pTemplate>
+        <div class=" card">
+            <p-table [value]="[stockDisplayDataForTable]"
+                [tableStyle]="{ 'min-width': '440', 'max-width': 'auto', 'background': 'red'}">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Period</th>
+                        <th>Price</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+                        <td>Last 3 Min</td>
+                        <td>{{ stockDisplayDataForTable.at(0)?.price?.toFixed(2) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Last 5 Min</td>
+                        <td>{{ stockDisplayDataForTable.at(1)?.price?.toFixed(2) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Last 8 Min</td>
+                        <td>{{ stockDisplayDataForTable.at(2)?.price?.toFixed(2) }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </ng-template>
+</p-panel>

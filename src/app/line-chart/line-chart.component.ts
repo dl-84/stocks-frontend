@@ -1,12 +1,6 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, ElementRef, Input } from '@angular/core';
 
-import * as d3 from 'd3-selection';
-import * as d3Scale from 'd3-scale';
-import * as d3Shape from 'd3-shape';
-import * as d3Array from 'd3-array';
-import * as d3Axis from 'd3-axis';
-
-import { StockLiveDataDto } from '../core/dto/stockLiveDataDto';
+import * as d3 from 'd3';
 
 @Component({
   selector: 'app-line-chart',
@@ -15,82 +9,100 @@ import { StockLiveDataDto } from '../core/dto/stockLiveDataDto';
 })
 
 export class LineChartComponent {
-  @Input() stockLiveData: Array<StockLiveDataDto>;
+  //@Input() public data: Array<LineChartDataDto>;
 
-  private width: number;
-  private height: number;
+  private width = 700;
+  private height = 700;
+  private margin = 50;
 
-  private marginTop: number;
-  private marginRight: number;
-  private marginBottom: number;
-  private marginLeft: number;
+  public svg: any;
+  public svgInner: any;
+  public yScale: any;
+  public xScale: any;
+  public xAxis: any;
+  public yAxis: any;
+  public lineGroup: any;
 
-  private svg: any;
-  private x: any;
-  private y: any;
-  private line: any;
+  constructor(public chartElem: ElementRef) { }
 
-  constructor() {
-    this.marginTop = 20;
-    this.marginRight = 40;
-    this.marginBottom = 20;
-    this.marginLeft = 20;
-
-    this.width = 380 - this.marginLeft - this.marginRight;
-    this.height = 300 - this.marginTop - this.marginBottom;
-  }
-
-  ngOnInit() {
-    this.initSvg();
-    this.initAxis();
-    this.drawAxis();
-    this.drawLine();
-  }
-
-  private initSvg() {
-    this.svg = d3.select('svg')
-      .append('g')
-      .attr('transform', 'translate(' + this.marginLeft + ',' + this.marginTop + ')');
-  }
-
-  private initAxis() {
-    this.x = d3Scale.scaleTime().range([0, this.width]);
-    this.y = d3Scale.scaleLinear().range([this.height, 0]);
-
-    this.x.domain(d3Array.extent(this.stockLiveData, (d) => d.timestamp));
-    this.y.domain(d3Array.extent(this.stockLiveData, (d) => d.lastPrice));
-  }
-
-  private drawAxis() {
-    this.svg.append('g')
-      .attr('class', 'axis axis--x')
-      .attr('transform', 'translate(0,' + this.height + ')')
-      .call(d3Axis.axisBottom(this.x));
-
-    this.svg.append('g')
-      .attr('class', 'axis axis--y')
-      .call(d3Axis.axisLeft(this.y))
-      .append('text')
-      .attr('class', 'axis-title')
-      .attr('transform', 'rotate(-90)')
-      .attr('y', 6)
-      .attr('dy', '.71em')
-      .style('text-anchor', 'end')
-      .text('Price ($)');
-  }
-
-  private drawLine() {
-    this.line = d3Shape.line()
-      .x((d: any) => this.x(d.timestamp))
-      .y((d: any) => this.y(d.lastPrice));
-
-    this.svg.append('path')
-      .datum(this.stockLiveData)
-      .attr("fill", "none")
-      .attr("stroke", "red")
-      .attr("stroke-width", 2.0)
-      .attr("stroke-linejoin", "round")
-      .attr("stroke-linecap", "round")
-      .attr("d", this.line);
-  }
+  /*
+    public ngOnChanges(changes: any): void {
+      if (this.data) {
+        console.log(this.data)
+        this.initializeChart();
+        this.drawChart();
+  
+        window.addEventListener('resize', () => this.drawChart());
+      }
+    }
+  
+    private initializeChart(): void {
+      this.svg = d3
+        .select(this.chartElem.nativeElement)
+        .select('.linechart')
+        .append('svg')
+        .attr('height', this.height);
+  
+      this.svgInner = this.svg
+        .append('g')
+        .style('transform', 'translate(' + this.margin + 'px, ' + this.margin + 'px)');
+  
+      this.yScale = d3
+        .scaleLinear()
+        .domain([d3.max(this.data, d => d.lastPrice)! + 1, d3.min(this.data, d => d.lastPrice)! - 1])
+        .range([0, this.height - 2 * this.margin]);
+  
+      this.yAxis = this.svgInner
+        .append('g')
+        .attr('id', 'y-axis')
+        .style('transform', 'translate(' + this.margin + 'px,  0)');
+  
+      // this.xScale = d3.scaleTime().domain(d3.extent(this.data, (d) => d.date));
+  
+      this.xAxis = this.svgInner
+        .append('g')
+        .attr('id', 'x-axis')
+        .style('transform', 'translate(0, ' + (this.height - 2 * this.margin) + 'px)');
+  
+      this.lineGroup = this.svgInner
+        .append('g')
+        .append('path')
+        .attr('id', 'line')
+        .style('fill', 'none')
+        .style('stroke', 'red')
+        .style('stroke-width', '2px')
+    }
+  
+    private drawChart(): void {
+      this.width = this.chartElem.nativeElement.getBoundingClientRect().width;
+      this.svg.attr('width', this.width);
+  
+      this.xScale.range([this.margin, this.width - 2 * this.margin]);
+  
+      const xAxis = d3
+        .axisBottom(this.xScale)
+        .ticks(10)
+      //.tickFormat(d3.timeFormat('%m / %Y'));
+  
+      this.xAxis.call(xAxis);
+  
+      const yAxis = d3
+        .axisLeft(this.yScale);
+  
+      this.yAxis.call(yAxis);
+  
+      const line = d3
+        .line()
+        .x(d => d[0])
+        .y(d => d[1])
+        .curve(d3.curveMonotoneX);
+  
+      const points: [number, number][] = this.data.map(d => [
+        this.xScale(new Date(d.timestamp)),
+        this.yScale(d.timestamp),
+      ]);
+  
+      this.lineGroup.attr('d', line(points));
+    }
+    */
 }

@@ -1,5 +1,5 @@
 <h2>
-    <p-button label="Home" icon="pi pi-home" [routerLink]="[mainRoute]"></p-button>
+    <p-button label="Home" icon="pi pi-home" [routerLink]="[mainRoute]" (onClick)="unsubscribe()"></p-button>
     <span class="header">{{ dashboard.header }}</span>
 </h2>
 
@@ -7,7 +7,9 @@
     <p-autoComplete placeholder="Search" [(ngModel)]="selectedStock" [suggestions]="filteredStocks"
         (completeMethod)="search($event)"></p-autoComplete>
 
-    <p-button label="Add" icon="pi pi-plus" (onClick)="add()"></p-button>
+    <div *ngIf="stocks.length < 4">
+        <p-button label="Add" icon="pi pi-plus" (onClick)="add()"></p-button>
+    </div>
 </div>
 
 <p-toolbar *ngIf="stocks === undefined || stocks === null || stocks.length === 0;">
@@ -17,7 +19,5 @@
 </p-toolbar>
 
 <div *ngFor="let stock of stocks">
-    <p-panel header="{{ stock.symbol }}">
-        <app-line-chart [stockLiveData]="liveData"></app-line-chart>
-    </p-panel>
+    <app-stock-view [stock]="stock"></app-stock-view>
 </div>
