@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input } from '@angular/core';
 
 import { AppFinnhubService } from '../core/services/app.finnhub.service';
 import { AppStockService } from '../core/services/app.stock.service';
@@ -15,22 +15,19 @@ import { StockMetaDataDto } from '../core/dto/stockMetaDataDto';
 export class StockViewComponent {
   @Input() stock: StockMetaDataDto;
 
+  public currentPrice: number;
   public stockDisplayData: Array<StockDisplayDataDto> = [];
-  public stockDisplayDataForTable: Array<StockDisplayDataDto> = [
-    { timestamp: new Date().valueOf(), price: 'NA' },
-    { timestamp: new Date().valueOf(), price: 'NA' },
-    { timestamp: new Date().valueOf(), price: 'NA' },
-  ];
+  public stockDisplayDataForTable: Array<StockDisplayDataDto> = [];
 
   private startTimestampForTableCalculation: Date;
 
   constructor(
+    public chartElem: ElementRef,
     private stockService: AppStockService,
     private finnhubService: AppFinnhubService,) { }
 
   ngOnInit() {
     this.subscribe();
-
     this.startTimestampForTableCalculation = new Date();
   }
 
@@ -43,7 +40,6 @@ export class StockViewComponent {
   }
 
   private subscribe() {
-    console.log(this.stock.symbol);
     this.finnhubService.websocket.next({
       'type': 'subscribe', 'symbol': this.stock.symbol
     });
@@ -55,21 +51,24 @@ export class StockViewComponent {
         if (response.type === 'trade') {
           response.data.map(content => {
             if (content.s === this.stock.symbol) {
-              this.stockDisplayData.push({
-                timestamp: content.t,
-                price: content.p.toFixed(2),
-              })
+              this.stockDisplayData = [
+                ...this.stockDisplayData, {
+                  timestamp: content.t, price: content.p
+                }
 
+
+              ]
+              this.currentPrice = content.p;
               this.calculateTableData();
             }
           });
         }
       },
       error: error => {
-        console.log(error)
+        // Todo: implement
       },
       complete: () => {
-        console.log('complete')
+        // Todo: implement
       },
     });
   }
@@ -83,6 +82,8 @@ export class StockViewComponent {
         - this.startTimestampForTableCalculation.getTime()) / 1000;
 
     if (timespan > 180) {
+      this.stockDisplayDataForTable = [...this.stockDisplayDataForTable];
+
       this.startTimestampForTableCalculation = new Date(lastStockData.timestamp);
 
       this.stockDisplayDataForTable[2] = this.stockDisplayDataForTable[1];

@@ -76,7 +76,6 @@ export class AppStockService {
                 this.getAllStocksForDashboard(dashboardId);
             })
             .catch(error => {
-                console.log(error);
                 this.router.navigate([Route.error]);
             });
     }
@@ -96,7 +95,6 @@ export class AppStockService {
                 this.getAllStocksForDashboard(dashboardId);
             })
             .catch(error => {
-                console.log(error);
                 this.router.navigate([Route.error]);
             });
     }

@@ -91,7 +91,6 @@ export class AppDashboardService {
                 this.getAll();
             })
             .catch(error => {
-                console.log(error);
                 this.router.navigate([Route.error]);
             });
     }

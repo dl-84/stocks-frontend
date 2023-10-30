@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit } from '@angular/core';
 
 import * as d3 from 'd3';
 
@@ -9,12 +9,11 @@ import { StockDisplayDataDto } from '../core/dto/stockDisplayDataDto';
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.scss']
 })
+export class LineChartComponent implements OnInit, OnChanges {
+  @Input() public data: StockDisplayDataDto[];
 
-export class LineChartComponent {
-  @Input() public data: Array<StockDisplayDataDto>;
-
-  private width = 700;
-  private height = 700;
+  private width = 400;
+  private height = 250;
   private margin = 50;
 
   public svg: any;
@@ -25,12 +24,16 @@ export class LineChartComponent {
   public yAxis: any;
   public lineGroup: any;
 
-  constructor(public chartElem: ElementRef) { }
+  constructor(public chartElem: ElementRef) {
+  }
 
+  ngOnInit(): void {
+  }
 
-  public ngOnChanges(changes: any): void {
-    if (this.data) {
-      console.log(this.data)
+  ngOnChanges(changes: any): void {
+    if (changes.hasOwnProperty('data') && this.data) {
+      d3.select("svg").remove();
+      d3.select("svgInner").remove();
       this.initializeChart();
       this.drawChart();
 
@@ -51,7 +54,7 @@ export class LineChartComponent {
 
     this.yScale = d3
       .scaleLinear()
-      //.domain([d3.max(this.data, d => d.price)! + 1, d3.min(this.data, d => d.price)! - 1])
+      .domain([d3.max(this.data, d => d.price)! + 1, d3.min(this.data, d => d.price)! - 1])
       .range([0, this.height - 2 * this.margin]);
 
     this.yAxis = this.svgInner
@@ -59,7 +62,9 @@ export class LineChartComponent {
       .attr('id', 'y-axis')
       .style('transform', 'translate(' + this.margin + 'px,  0)');
 
-    // this.xScale = d3.scaleTime().domain(d3.extent(this.data, (d) => d.date));
+    this.xScale = d3
+      .scaleTime()
+      .domain(this.data.map(d => new Date(d.timestamp)));
 
     this.xAxis = this.svgInner
       .append('g')
@@ -77,6 +82,7 @@ export class LineChartComponent {
 
   private drawChart(): void {
     this.width = this.chartElem.nativeElement.getBoundingClientRect().width;
+
     this.svg.attr('width', this.width);
 
     this.xScale.range([this.margin, this.width - 2 * this.margin]);
@@ -84,7 +90,6 @@ export class LineChartComponent {
     const xAxis = d3
       .axisBottom(this.xScale)
       .ticks(10)
-    //.tickFormat(d3.timeFormat('%m / %Y'));
 
     this.xAxis.call(xAxis);
 
@@ -99,10 +104,11 @@ export class LineChartComponent {
       .y(d => d[1])
       .curve(d3.curveMonotoneX);
 
-    const points: [number, number][] = this.data.map(d => [
-      this.xScale(new Date(d.timestamp)),
-      this.yScale(d.timestamp),
-    ]);
+    const points: [number, number][] = this.data.map(
+      d => [
+        this.xScale(new Date(d.timestamp)),
+        this.yScale(d.price),
+      ]);
 
     this.lineGroup.attr('d', line(points));
   }

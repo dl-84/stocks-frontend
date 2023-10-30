@@ -20,6 +20,10 @@
 
                 <ng-template pTemplate="body" let-product>
                     <tr>
+                        <td>Current</td>
+                        <td>{{ currentPrice.toFixed(2) }}</td>
+                    </tr>
+                    <tr>
                         <td>Last 3 Min</td>
                         <td>{{ stockDisplayDataForTable.at(0)?.price }}</td>
                     </tr>
@@ -35,4 +39,6 @@
             </p-table>
         </div>
     </ng-template>
+
+    <app-line-chart [data]="stockDisplayDataForTable"></app-line-chart>
 </p-panel>
