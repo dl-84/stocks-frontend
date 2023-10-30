@@ -2,13 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, Output } from '@angular/core';
 
 import { firstValueFrom } from 'rxjs';
-import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
+import { webSocket } from 'rxjs/webSocket';
 
 import { Url } from '../const/url';
 import { StockMetaDataDto } from '../dto/stockMetaDataDto';
 import { Token } from '../const/token';
 import { Websocket } from '../const/websocket';
-import { StockLiveDataDto } from '../dto/stockLiveDataDto';
 
 
 @Injectable({
@@ -17,10 +16,19 @@ import { StockLiveDataDto } from '../dto/stockLiveDataDto';
 export class AppFinnhubService {
     private webSocket;
 
-    constructor(private httpClient: HttpClient) {
+    constructor(
+        private httpClient: HttpClient,
+    ) {
         this.webSocket = webSocket(Websocket.finnhub);
     }
 
+    /**
+     * Get available stocks.
+     * 
+     * Gets all available stocks entries from finnhub.
+     * 
+     * @returns Promise<Array<StockMetaDataDto>>
+     */
     async getAvailableStocks(): Promise<Array<StockMetaDataDto>> {
         let result: Array<StockMetaDataDto> = [];
 
@@ -34,6 +42,11 @@ export class AppFinnhubService {
         return result;
     }
 
+    /**
+     * Websocket.
+     * 
+     * @returns The websocket object.
+     */
     get websocket() {
         return this.webSocket
     }

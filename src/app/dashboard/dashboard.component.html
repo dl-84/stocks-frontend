@@ -21,3 +21,7 @@
 <div *ngFor="let stock of stocks">
     <app-stock-view [stock]="stock"></app-stock-view>
 </div>
+
+<p-dialog header="Error" [(visible)]="errorDialogIsVisible">
+    <p>This stock is already present in the dashboard.</p>
+</p-dialog>

@@ -12,17 +12,18 @@ import { Route } from '../core/const/route';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent {
-  addDialogIsVisible: boolean = false;
-  editDialogIsVisible: boolean = false;
-  errorDialogIsVisible: boolean = false;
+  public addDialogIsVisible: boolean = false;
+  public editDialogIsVisible: boolean = false;
+  public errorDialogIsVisible: boolean = false;
 
-  id: number = NaN;
-  header: string = '';
+  public id: number = NaN;
+  public header: string = '';
 
   constructor(
     private configService: AppDashboardService,
     private router: Router,
-    private stockService: AppStockService) { }
+    private stockService: AppStockService,
+  ) { }
 
   get dashboards(): Array<DashboardDto> {
     return this.configService.dashboards;
@@ -68,7 +69,7 @@ export class MainComponent {
       return;
     }
 
-    this.configService.updateElement({
+    this.configService.update({
       id: id,
       header: this.header
     });
@@ -79,6 +80,6 @@ export class MainComponent {
 
   delete(id: number): void {
     this.stockService.deleteByDashboardId(id);
-    this.configService.deleteAtIndex(id);
+    this.configService.deleteAtId(id);
   }
 }

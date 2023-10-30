@@ -14,8 +14,18 @@ import { Url } from '../const/url';
 export class AppDashboardService {
     public dashboards: Array<DashboardDto> = [];
 
-    constructor(private httpClient: HttpClient, private router: Router) { }
+    constructor(
+        private httpClient: HttpClient,
+        private router: Router,
+    ) { }
 
+    /**
+     * Get all.
+     * 
+     * Gets all stored dashboard dataset from the backend.
+     * 
+     * @returns Promise<any>.
+     */
     getAll(): Promise<any> {
         const promise = firstValueFrom(
             this.httpClient.get(Url.dashbord))
@@ -30,6 +40,13 @@ export class AppDashboardService {
         return promise;
     }
 
+    /**
+     * Add.
+     * 
+     * Adds a new dataset of dashbord dto to the backend.
+     * 
+     * @param dashboard - The dashboard data they should be stored.
+     */
     add(dashboard: DashboardDto): void {
         firstValueFrom(
             this.httpClient.post(Url.dashbord, dashboard))
@@ -41,7 +58,14 @@ export class AppDashboardService {
             });
     }
 
-    updateElement(dashboard: DashboardDto) {
+    /**
+     * Update.
+     * 
+     * Updates a dataset of dashbord dto in the backend.
+     * 
+     * @param dashboard - The dashboard dataset that should be updated.
+     */
+    update(dashboard: DashboardDto) {
         firstValueFrom(
             this.httpClient.put(Url.dashbord, dashboard))
             .then(_ => {
@@ -52,7 +76,14 @@ export class AppDashboardService {
             });
     }
 
-    deleteAtIndex(id: Number): void {
+    /**
+     * Delete at id.
+     * 
+     * Delete an dashboard dataset bases on the id.
+     * 
+     * @param id - The dashboard id they should be deleted.
+     */
+    deleteAtId(id: Number): void {
         firstValueFrom(
             this.httpClient.delete(Url.dashbord + `/${id}`))
             .then(_ => {

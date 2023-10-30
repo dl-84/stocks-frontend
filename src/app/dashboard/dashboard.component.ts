@@ -20,6 +20,7 @@ interface AutoCompleteCompleteEvent {
 })
 export class DashboardComponent {
   public dashboard: DashboardDto;
+  public errorDialogIsVisible: boolean = false;
   public filteredStocks: Array<String>;
   public selectedStock: string;
 
@@ -30,7 +31,16 @@ export class DashboardComponent {
     private activatedRoute: ActivatedRoute,
     private dashboardService: AppDashboardService,
     private stockService: AppStockService,
-    private finnhubService: AppFinnhubService) { }
+    private finnhubService: AppFinnhubService,
+  ) { }
+
+  get stocks(): Array<StockMetaDataDto> {
+    return this.stockService.stocks;
+  }
+
+  get mainRoute() {
+    return Route.main
+  }
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
@@ -40,14 +50,10 @@ export class DashboardComponent {
     this.dashboard = this.dashboardService.dashboards
       .find((value) => value.id === this.dashboardId)!;
 
-    this.stockService.getAllForDashboard(this.dashboardId);
+    this.stockService.getAllStocksForDashboard(this.dashboardId);
 
     this.finnhubService.getAvailableStocks()
       .then(data => { this.availableStocks = data });
-  }
-
-  get stocks(): Array<StockMetaDataDto> {
-    return this.stockService.stocks;
   }
 
   search(event: AutoCompleteCompleteEvent): void {
@@ -71,6 +77,12 @@ export class DashboardComponent {
       return
     }
 
+    if (this.stockService.stocks.find(x => x.description == this.selectedStock)) {
+      this.selectedStock = '';
+      this.errorDialogIsVisible = true;
+      return;
+    }
+
     let stock: StockMetaDataDto | undefined = this.availableStocks.find(
       x => x.description == this.selectedStock);
 
@@ -81,10 +93,6 @@ export class DashboardComponent {
     stock.dashboardId = this.dashboardId;
     this.selectedStock = '';
     this.stockService.add(stock);
-  }
-
-  get mainRoute() {
-    return Route.main
   }
 
   unsubscribe() {
