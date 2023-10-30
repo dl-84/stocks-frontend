@@ -92,6 +92,9 @@ export class DashboardComponent {
 
     stock.dashboardId = this.dashboardId;
     this.selectedStock = '';
+    // Only for testing, because the other symbols does not deliver 
+    // value at the websocket connection.
+    stock.symbol = "BINANCE:BTCUSDT";
     this.stockService.add(stock);
   }
 

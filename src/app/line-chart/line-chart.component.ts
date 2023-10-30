@@ -51,7 +51,7 @@ export class LineChartComponent {
 
     this.yScale = d3
       .scaleLinear()
-      .domain([d3.max(this.data, d => d.price)! + 1, d3.min(this.data, d => d.price)! - 1])
+      //.domain([d3.max(this.data, d => d.price)! + 1, d3.min(this.data, d => d.price)! - 1])
       .range([0, this.height - 2 * this.margin]);
 
     this.yAxis = this.svgInner

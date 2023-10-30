@@ -21,15 +21,15 @@
                 <ng-template pTemplate="body" let-product>
                     <tr>
                         <td>Last 3 Min</td>
-                        <td>{{ stockDisplayDataForTable.at(0)?.price?.toFixed(2) }}</td>
+                        <td>{{ stockDisplayDataForTable.at(0)?.price }}</td>
                     </tr>
                     <tr>
                         <td>Last 5 Min</td>
-                        <td>{{ stockDisplayDataForTable.at(1)?.price?.toFixed(2) }}</td>
+                        <td>{{ stockDisplayDataForTable.at(1)?.price }}</td>
                     </tr>
                     <tr>
                         <td>Last 8 Min</td>
-                        <td>{{ stockDisplayDataForTable.at(2)?.price?.toFixed(2) }}</td>
+                        <td>{{ stockDisplayDataForTable.at(2)?.price }}</td>
                     </tr>
                 </ng-template>
             </p-table>

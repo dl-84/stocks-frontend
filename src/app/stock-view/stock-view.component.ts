@@ -17,9 +17,9 @@ export class StockViewComponent {
 
   public stockDisplayData: Array<StockDisplayDataDto> = [];
   public stockDisplayDataForTable: Array<StockDisplayDataDto> = [
-    { timestamp: new Date().valueOf(), price: 0 },
-    { timestamp: new Date().valueOf(), price: 0 },
-    { timestamp: new Date().valueOf(), price: 0 },
+    { timestamp: new Date().valueOf(), price: 'NA' },
+    { timestamp: new Date().valueOf(), price: 'NA' },
+    { timestamp: new Date().valueOf(), price: 'NA' },
   ];
 
   private startTimestampForTableCalculation: Date;
@@ -57,7 +57,7 @@ export class StockViewComponent {
             if (content.s === this.stock.symbol) {
               this.stockDisplayData.push({
                 timestamp: content.t,
-                price: content.p,
+                price: content.p.toFixed(2),
               })
 
               this.calculateTableData();
@@ -82,7 +82,7 @@ export class StockViewComponent {
       (new Date(lastStockData.timestamp).getTime()
         - this.startTimestampForTableCalculation.getTime()) / 1000;
 
-    if (timespan > 5) {
+    if (timespan > 180) {
       this.startTimestampForTableCalculation = new Date(lastStockData.timestamp);
 
       this.stockDisplayDataForTable[2] = this.stockDisplayDataForTable[1];

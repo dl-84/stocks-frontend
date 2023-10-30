@@ -11,5 +11,5 @@ export class StockDisplayDataDto {
      * 
      * The last price of the stock.
      */
-    price: number;
+    price: string;
 }

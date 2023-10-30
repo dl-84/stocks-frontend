@@ -22,5 +22,5 @@ export class Url {
      * from the us market.
      */
     public static readonly availableStocks: string =
-        'https://finnhub.io/api/v1/stock/symbol?exchange=US&mic=XNYS'
+        'https://finnhub.io/api/v1/stock/symbol?exchange=US&mic=XNYS';
 }
