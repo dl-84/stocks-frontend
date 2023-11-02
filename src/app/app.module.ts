@@ -7,6 +7,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+import { ChartModule } from 'angular-highcharts';
+
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -44,6 +46,7 @@ export function appConfigInit(appDashboardService: AppDashboardService) {
     BrowserModule,
     BrowserAnimationsModule,
     ButtonModule,
+    ChartModule,
     DialogModule,
     FormsModule,
     HttpClientModule,

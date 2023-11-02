@@ -15,7 +15,6 @@ import { StockMetaDataDto } from '../core/dto/stockMetaDataDto';
 export class StockViewComponent {
   @Input() stock: StockMetaDataDto;
 
-  public currentPrice: number;
   public stockDisplayData: Array<StockDisplayDataDto> = [];
   public stockDisplayDataForTable: Array<StockDisplayDataDto> = [];
 
@@ -55,10 +54,8 @@ export class StockViewComponent {
                 ...this.stockDisplayData, {
                   timestamp: content.t, price: content.p
                 }
-
-
               ]
-              this.currentPrice = content.p;
+
               this.calculateTableData();
             }
           });
@@ -81,7 +78,12 @@ export class StockViewComponent {
       (new Date(lastStockData.timestamp).getTime()
         - this.startTimestampForTableCalculation.getTime()) / 1000;
 
-    if (timespan > 180) {
+    if (this.stockDisplayDataForTable === undefined ||
+      this.stockDisplayDataForTable.length === 0) {
+      this.stockDisplayDataForTable[0] = lastStockData;
+    }
+
+    if (timespan > 10) {
       this.stockDisplayDataForTable = [...this.stockDisplayDataForTable];
 
       this.startTimestampForTableCalculation = new Date(lastStockData.timestamp);
